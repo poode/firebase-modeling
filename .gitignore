@@ -1,0 +1,8 @@
+.env
+pathSchema*
+**/**.txt
+node_modules
+*Path.json
+*Paths.json
+*.bk.json
+.vscode
