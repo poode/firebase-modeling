@@ -133,23 +133,19 @@ class DbCollector {
         const wStream = fs.createWriteStream(this.readFilePath,{ encoding: 'utf-8'})
         wStream.write(collectionsArray.join('\n'), async (err) => {
             if(err) throw err;
-            try {
-                const collections = await this.readFile(this.readFilePath);
-                const collectionsWithSubcollections = await this.readFile(this.readFilePath, { withSubCollections: true });
-                const result = { collections, collectionsWithSubcollections };
-                const jsonWriteStream = fs.createWriteStream(
-                    path.resolve(
-                        this.debug.exportPath
-                        || this.exportPath, this.exportFileName
-                        || 'dbPaths.json'), { encoding: 'utf-8'})
+            const collections = await this.readFile(this.readFilePath);
+            const collectionsWithSubcollections = await this.readFile(this.readFilePath, { withSubCollections: true });
+            const result = { collections, collectionsWithSubcollections };
+            const jsonWriteStream = fs.createWriteStream(
+                path.resolve(
+                    this.debug.exportPath
+                    || this.exportPath, this.exportFileName
+                    || 'dbPaths.json'), { encoding: 'utf-8'})
 
-                jsonWriteStream.write(JSON.stringify(result), err => {
-                    if(err) throw err;
-                    console.log('Done');
-                })
-            } catch (error) {
-                throw error;
-            }
+            jsonWriteStream.write(JSON.stringify(result), err => {
+                if(err) throw err;
+                console.log('Done');
+            })
         })
     }
 
