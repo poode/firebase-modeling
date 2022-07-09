@@ -1,10 +1,11 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const FindSchema = require('./FindSchema');
 
 module.exports = class Process {
-    constructor (subColl, opts = { chunkSize: 2, exportPath: './', fileName: 'schema.json' }) {
+    constructor (subColl, opts = { chunkSize: 2, exportPath: os.homedir(), fileName: 'schema.json' }) {
         this.subColl = subColl
         this.opts = opts
         this.filePath = path.resolve(`${this.opts.exportPath}/${this.opts.fileName}`);
@@ -78,7 +79,7 @@ module.exports = class Process {
         })
     }
 
-    async processChunk () {
+    async main () {
         const chunkedArr = this.chunkArray(this.subColl, this.opts.chunkSize);
         console.log(`chunkedArr Length: ${chunkedArr.length}`);
         console.log(`chunk length: ${this.opts.chunkSize}`);
@@ -86,7 +87,7 @@ module.exports = class Process {
         await Promise.all(chunkedArr.map(async (array, index) => {
             const resArr = await Promise.all(array.map(path => {
                 const FindSchemaInstance = new FindSchema();
-                return FindSchemaInstance.getOneCollectionSchema(path)
+                return FindSchemaInstance.main(path)
             }));
             
             console.log(`Handeling now ${JSON.stringify(array)}`)
@@ -102,5 +103,6 @@ module.exports = class Process {
         console.log('making a good json file!')
         await this.collectOneArray();
         this.handelRepeated();
+        console.log(`The Full schema is in ${this.filePath}`)
     }
 }
