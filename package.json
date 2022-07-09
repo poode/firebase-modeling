@@ -1,14 +1,19 @@
 {
-  "name": "playground",
+  "name": "firebase-modeling",
   "version": "1.0.0",
-  "description": "",
+  "description": "Get firebase/firestore db schema",
   "main": "test.js",
-  "scripts": {
-    "test": "node test/test.js"
+  "keywords": ["firebase", "firestore", "get model", "get schema", "no pains"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/poode/firebase-modeling.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Abdulazeem Mohammed <eng.abdul.azeem@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/poode/firebase-modeling/issues"
+  },
+  "homepage": "https://github.com/poode/firebase-modeling#readme",
+  "license": "MIT",
   "dependencies": {
     "dotenv": "^16.0.1",
     "firebase-admin": "^11.0.0",

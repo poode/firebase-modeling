@@ -32,7 +32,7 @@ class FindSchema {
     return splitedStr.slice(0, splitedStr.length - 1).join(splitter);
   }
 
-  async getOneCollectionSchema (collectionFullPath) {
+  async main (collectionFullPath) {
     try {
       const splitter = '/';
       const fullPath = collectionFullPath
@@ -48,7 +48,7 @@ class FindSchema {
         this.schema = {
           ...this.schema,
           [this.pathStr]: { ...this.getSchemaFromArray(docList) },
-          ...await this.getOneCollectionSchema(collectionFullPath)
+          ...await this.main(collectionFullPath)
         }
         return this.schema;
       }
