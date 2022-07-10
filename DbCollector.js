@@ -33,7 +33,7 @@ class DbCollector {
      */
     async listCollections () {
         const snapshot = await db.listCollections();
-        return snapshot.map(snaps => snaps["_queryOptions"].collectionId);
+        return snapshot.map(snaps => snaps["_queryOptions"].collectionId || snaps.id);
     }
 
     /**
@@ -72,6 +72,8 @@ class DbCollector {
         const subList = await Promise.all(collNameList.map(async collName => {
             return this.getSubCollections(collName);
         }));
+
+        console.log('get full path of collections and subcollections!')
         return [...new Set(subList.join(',').split(','))].filter(i => !!i)
     }
 
@@ -145,7 +147,7 @@ class DbCollector {
 
                 jsonWriteStream.write(JSON.stringify(result), err => {
                     if(err) reject(err);
-                    console.log('Done');
+                    console.log('Done, processFiles in DbCollector');
                     resolve(path.resolve(`${this.exportPath}/${this.exportFileName}`));
                 })
             })

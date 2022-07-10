@@ -63,8 +63,15 @@ class FindSchema {
       }
     }
     } catch (error) {
-      console.error(collectionFullPath)
-      throw error;
+      this.pathStr = '';
+      console.error('Error with Path: ', collectionFullPath)
+      console.error(error);
+      if (error.message.includes('The requested snapshot version is too old.')) {
+        const splittedPath = collectionFullPath.split('/');
+        const path = splittedPath.slice(0, splittedPath.length - 1).join('/');
+        console.log('Deleting this old Document!')
+        await db.doc(path).delete();
+      }
     }
   }
 }

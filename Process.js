@@ -5,7 +5,7 @@ const os = require('os');
 const FindSchema = require('./FindSchema');
 
 module.exports = class Process {
-    constructor (subColl, opts = { chunkSize: 2, exportPath: os.homedir(), fileName: 'schema.json' }) {
+    constructor (subColl, opts = { timeout: 5, chunkSize: 1, exportPath: os.homedir(), fileName: 'schema.json' }) {
         this.subColl = subColl
         this.opts = opts
         this.filePath = path.resolve(`${this.opts.exportPath}/${this.opts.fileName}`);
@@ -46,6 +46,8 @@ module.exports = class Process {
 
     handelRepeatedProps (arr) {
         return arr.reduce((acc, obj) => {
+            const keys  = Object.keys(obj)
+            if(!keys) return acc;
             Object.keys(obj).map(key => {
               acc[key] = {...acc[key], ...obj[key]}
             })
@@ -57,7 +59,9 @@ module.exports = class Process {
     handelRepeated () {
         const jsonArr = require(this.filePath);
         const cleanedFile = jsonArr.map(obj => {
+            if (!obj) return {};
             return Object.keys(obj).reduce((acc, key) => {
+                if (!key) return acc;
                 const splittedpath = key.split('/');
                 let newKey;
                 const isSubCollection = Boolean(splittedpath.length % 2);
@@ -97,7 +101,7 @@ module.exports = class Process {
                 console.log(`done with chunk number ${index}`)
             })
 
-            return this.sleep(2 * 1000);
+            return this.sleep(this.opts.timeout * 1000);
         }))
         
         console.log('making a good json file!')

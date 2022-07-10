@@ -6,7 +6,8 @@ async function main () {
     const SkitchCollection = new DbCollector();
     const ProcessFiles = new Process();
     const pathJsonFile = await SkitchCollection.main();
-    ProcessFiles.subColl = require(pathJsonFile).collectionsWithSubcollections;
+    jsonFile = require(pathJsonFile);
+    ProcessFiles.subColl = [...new Set(Object.values(jsonFile).flat())]
     return ProcessFiles.main.bind(ProcessFiles)();
 }
 
